@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HidroTeknik Sanayi Market | Hidrolik, Pnömatik, Güç Aktarım</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Google Fonts Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            sanayi: {
+              navy: '#0f172a',
+              slate: '#1e293b',
+              orange: '#f97316',
+              orangeHover: '#ea580c',
+              yellow: '#eab308',
+              steel: '#64748b',
+              light: '#f8fafc'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Custom Scrollbar for industrial catalogs */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    .badge-code { font-family: 'JetBrains Mono', monospace; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
+
+  <!-- TOP BAR: B2B İletişim & Hızlı Bilgi -->
+  <div class="bg-sanayi-navy text-slate-300 text-xs py-2 px-4 border-b border-slate-800">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
+      <div class="flex items-center gap-4">
+        <span class="flex items-center gap-1.5"><i data-lucide="map-pin" class="w-3.5 h-3.5 text-sanayi-orange"></i> İkitelli OSB / Başakşehir / İstanbul</span>
+        <span class="hidden md:inline-block text-slate-600">|</span>
+        <span class="hidden md:flex items-center gap-1.5"><i data-lucide="clock" class="w-3.5 h-3.5 text-sanayi-yellow"></i> Hafta İçi: 08:30 - 18:30</span>
+      </div>
+      <div class="flex items-center gap-4 font-medium">
+        <a href="tel:+902120000000" class="hover:text-white transition flex items-center gap-1"><i data-lucide="phone" class="w-3.5 h-3.5 text-sanayi-orange"></i> 0212 444 XX XX</a>
+        <span class="text-slate-600">|</span>
+        <a href="https://wa.me/905000000000" target="_blank" class="text-emerald-400 hover:text-emerald-300 transition flex items-center gap-1"><i data-lucide="message-circle" class="w-3.5 h-3.5"></i> WhatsApp Hızlı Destek</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header class="bg-white sticky top-0 z-30 shadow-sm border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 py-3.5 flex items-center justify-between gap-4">
+      
+      <!-- Marka Logo -->
+      <div class="flex items-center gap-3 cursor-pointer" onclick="resetFilters()">
+        <div class="w-10 h-10 rounded-lg bg-sanayi-slate flex items-center justify-center text-sanayi-orange shadow-inner">
+          <i data-lucide="settings" class="w-6 h-6 animate-[spin_10s_linear_infinite]"></i>
+        </div>
+        <div>
+          <span class="font-extrabold text-xl tracking-tight text-slate-900 block leading-tight">HİDRO<span class="text-sanayi-orange">TEKNİK</span></span>
+          <span class="text-[10px] uppercase font-bold tracking-widest text-slate-500 block">Endüstriyel Market & Tedarik</span>
+        </div>
+      </div>
+
+      <!-- Arama Motoru (Ürün adı, kod, ölçü) -->
+      <div class="flex-1 max-w-xl relative hidden sm:block">
+        <div class="relative">
+          <input 
+            type="text" 
+            id="searchInput"
+            oninput="handleSearch(this.value)"
+            placeholder="Ürün adı, parça kodu (Örn: HD-402, Triger, Valf)..."
+            class="w-full pl-10 pr-10 py-2.5 rounded-lg border border-slate-300 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-sanayi-orange focus:border-transparent text-sm transition"
+          />
+          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5"></i>
+          <button id="clearSearchBtn" onclick="clearSearch()" class="hidden absolute right-3 top-3 text-slate-400 hover:text-slate-600">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Aksiyonlar: Sepet & Teklif Çekmecesi Butonu -->
+      <div class="flex items-center gap-3">
+        <button 
+          onclick="toggleDrawer(true)"
+          class="relative flex items-center gap-2.5 bg-sanayi-slate hover:bg-slate-800 text-white px-4 py-2.5 rounded-lg font-semibold text-sm transition shadow-sm"
+        >
+          <i data-lucide="clipboard-list" class="w-4 h-4 text-sanayi-orange"></i>
+          <span class="hidden md:inline">Sipariş & Teklif Listesi</span>
+          <span class="inline md:hidden">Liste</span>
+          <span id="cartCountBadge" class="bg-sanayi-orange text-white text-xs font-bold px-2 py-0.5 rounded-full ring-2 ring-white">0</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobil Arama Çubuğu -->
+    <div class="px-4 pb-3 sm:hidden">
+      <div class="relative">
+        <input 
+          type="text" 
+          id="mobileSearchInput"
+          oninput="handleSearch(this.value)"
+          placeholder="Kod, parça veya ürün ara..."
+          class="w-full pl-10 pr-4 py-2 rounded-lg border border-slate-300 bg-slate-50 text-sm focus:outline-none focus:ring-2 focus:ring-sanayi-orange"
+        />
+        <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-2.5"></i>
+      </div>
+    </div>
+  </header>
+
+  <!-- SEKTÖREL BİLGİLENDİRME BANT -->
+  <div class="bg-gradient-to-r from-slate-900 via-sanayi-slate to-slate-900 text-white py-4 px-4 shadow-inner">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3 text-sm">
+      <div class="flex items-center gap-2">
+        <span class="p-1 rounded bg-sanayi-orange/20 text-sanayi-orange"><i data-lucide="shield-check" class="w-5 h-5"></i></span>
+        <span><strong>Kurumsal Sanayi Çözümü:</strong> Sabit fiyatlı sarf malzemelerini anında online alın, özel ölçülü endüstriyel ekipman için tek tuşla <strong>teklif listesi</strong> oluşturun.</span>
+      </div>
+      <div class="flex items-center gap-3 text-xs text-slate-300">
+        <span class="flex items-center gap-1"><i data-lucide="truck" class="w-4 h-4 text-sanayi-yellow"></i> Aynı Gün Ambar / Kargo</span>
+        <span class="flex items-center gap-1"><i data-lucide="file-text" class="w-4 h-4 text-emerald-400"></i> Kurumsal E-Fatura</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ANA İÇERİK DÜZENİ -->
+  <main class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full flex flex-col lg:flex-row gap-8">
+    
+    <!-- YAN PANEL (FİLTRELER) -->
+    <aside class="w-full lg:w-64 flex-shrink-0">
+      <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm sticky top-24 space-y-6">
+        
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+          <h3 class="font-bold text-slate-900 flex items-center gap-2">
+            <i data-lucide="sliders-horizontal" class="w-4 h-4 text-sanayi-orange"></i> Filtrele & Kategori
+          </h3>
+          <button onclick="resetFilters()" class="text-xs text-sanayi-orange hover:underline font-medium">Sıfırla</button>
+        </div>
+
+        <!-- Kategoriler -->
+        <div>
+          <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2.5">Ürün Grubu</label>
+          <div class="space-y-1.5" id="categoryFilterContainer">
+            <!-- JS ile doldurulacak -->
+          </div>
+        </div>
+
+        <!-- Satış Tipi Filtresi -->
+        <div>
+          <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2.5">Satış Türü</label>
+          <div class="space-y-2 text-sm">
+            <label class="flex items-center gap-2 text-slate-600 hover:text-slate-900 cursor-pointer">
+              <input type="radio" name="saleType" value="all" checked onchange="filterProducts()" class="text-sanayi-orange focus:ring-sanayi-orange">
+              <span>Tümü</span>
+            </label>
+            <label class="flex items-center gap-2 text-slate-600 hover:text-slate-900 cursor-pointer">
+              <input type="radio" name="saleType" value="ecommerce" onchange="filterProducts()" class="text-sanayi-orange focus:ring-sanayi-orange">
+              <span>Hemen Satın Al (Fiyatlı)</span>
+            </label>
+            <label class="flex items-center gap-2 text-slate-600 hover:text-slate-900 cursor-pointer">
+              <input type="radio" name="saleType" value="quote" onchange="filterProducts()" class="text-sanayi-orange focus:ring-sanayi-orange">
+              <span>Fiyat Teklifi İstenecek</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Stok Durumu -->
+        <div class="pt-2 border-t border-slate-100">
+          <label class="flex items-center gap-2 text-sm font-medium text-slate-700 cursor-pointer">
+            <input type="checkbox" id="stockOnlyCheckbox" onchange="filterProducts()" class="rounded text-sanayi-orange focus:ring-sanayi-orange w-4 h-4">
+            <span>Yalnızca Stoktakiler</span>
+          </label>
+        </div>
+
+        <!-- Yardım Kutusu -->
+        <div class="bg-amber-50 rounded-lg p-3.5 border border-amber-200 text-xs text-amber-900">
+          <p class="font-bold flex items-center gap-1 mb-1">
+            <i data-lucide="help-circle" class="w-4 h-4 text-amber-600"></i> Teknik Çizim / Numune
+          </p>
+          Özel silindir veya kayış ölçüleriniz için teknik resminizi WhatsApp hattımıza doğrudan iletebilirsiniz.
+        </div>
+
+      </div>
+    </aside>
+
+    <!-- SAĞ BÖLÜM: ÜRÜN LİSTESİ -->
+    <section class="flex-1">
+      
+      <!-- Liste Başlığı & İstatistik -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 mb-6 border-b border-slate-200 gap-3">
+        <div>
+          <h1 class="text-2xl font-bold text-slate-900" id="currentCategoryTitle">Tüm Endüstriyel Ürünler</h1>
+          <p class="text-xs text-slate-500 mt-1">Sistemde toplam <span id="productCount" class="font-bold text-slate-700">0</span> ürün listeleniyor</p>
+        </div>
+        <div class="flex items-center gap-2 text-xs">
+          <span class="text-slate-500">Sıralama:</span>
+          <select id="sortSelect" onchange="filterProducts()" class="bg-white border border-slate-300 rounded-md py-1.5 px-2.5 text-slate-700 font-medium focus:ring-1 focus:ring-sanayi-orange focus:outline-none">
+            <option value="featured">Öne Çıkanlar</option>
+            <option value="price-asc">Fiyat: Düşükten Yükseğe</option>
+            <option value="price-desc">Fiyat: Yüksekten Düşüğe</option>
+            <option value="code">Ürün Koduna Göre (A-Z)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- ÜRÜN KARTLARI IZGARASI -->
+      <div id="productsGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+        <!-- JS ile dinamik doldurulacak -->
+      </div>
+
+      <!-- Boş Durum -->
+      <div id="noResults" class="hidden text-center py-16 bg-white rounded-xl border border-slate-200 p-8">
+        <i data-lucide="package-x" class="w-12 h-12 text-slate-300 mx-auto mb-3"></i>
+        <h4 class="text-lg font-bold text-slate-700">Aradığınız kriterlere uygun ürün bulunamadı</h4>
+        <p class="text-sm text-slate-500 mt-1">Farklı bir arama terimi deneyebilir veya filtreleri temizleyebilirsiniz.</p>
+        <button onclick="resetFilters()" class="mt-4 px-4 py-2 bg-sanayi-slate text-white text-xs font-semibold rounded-lg hover:bg-slate-700">Tüm Ürünleri Göster</button>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-sanayi-navy text-slate-400 text-xs py-8 border-t border-slate-800 mt-12">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
+      <div class="flex items-center gap-2">
+        <span class="text-white font-bold text-base tracking-wider">HİDROTEKNİK</span>
+        <span>© 2026 Sanayi ve Ticaret Ltd. Şti.</span>
+      </div>
+      <div class="flex items-center gap-6">
+        <span>Teknik Destek & Sipariş: <strong>0212 444 XX XX</strong></span>
+        <span>E-Posta: <strong>teklif@hidroteknik.example</strong></span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================= MODALS & DRAWERS ================= -->
+
+  <!-- TEKLİF & SEPET DRAWER (SAĞDAN KAYAN PANEL) -->
+  <div id="cartDrawer" class="fixed inset-0 z-50 overflow-hidden pointer-events-none transition-opacity duration-300 opacity-0">
+    <!-- Backdrop -->
+    <div id="drawerBackdrop" onclick="toggleDrawer(false)" class="absolute inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity"></div>
+
+    <div class="fixed inset-y-0 right-0 max-w-full flex pl-10 pointer-events-auto">
+      <div class="w-screen max-w-md bg-white shadow-2xl flex flex-col">
+        
+        <!-- Drawer Header -->
+        <div class="p-4 bg-sanayi-slate text-white flex items-center justify-between border-b border-slate-800">
+          <div class="flex items-center gap-2">
+            <i data-lucide="shopping-bag" class="w-5 h-5 text-sanayi-orange"></i>
+            <h3 class="font-bold text-base">Sipariş & Teklif Sepetiniz</h3>
+          </div>
+          <button onclick="toggleDrawer(false)" class="text-slate-400 hover:text-white p-1 rounded-md">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <!-- Ürünler Listesi (Kaydırılabilir Alan) -->
+        <div class="flex-1 overflow-y-auto p-4 space-y-3" id="drawerItemsList">
+          <!-- JS ile doldurulacak -->
+        </div>
+
+        <!-- Drawer Footer: Özet ve Form -->
+        <div class="p-4 bg-slate-50 border-t border-slate-200 space-y-4">
+          
+          <!-- Tutar Özeti -->
+          <div class="bg-white p-3 rounded-lg border border-slate-200 space-y-1.5 text-xs">
+            <div class="flex justify-between text-slate-600">
+              <span>Hemen Alınacak Ürünler Tutarı:</span>
+              <span id="drawerFixedTotal" class="font-bold text-slate-900">0,00 TL</span>
+            </div>
+            <div class="flex justify-between text-amber-700">
+              <span>Özel Teklif İstenecek Kalem:</span>
+              <span id="drawerQuoteCount" class="font-bold">0 Kalem Ürün</span>
+            </div>
+            <div class="text-[11px] text-slate-400 pt-1 border-t border-slate-100">
+              * Fiyat teklifleri 2 saat içinde kaşeli/imzalı PDF olarak iletilir.
+            </div>
+          </div>
+
+          <!-- Müşteri Hızlı İletişim Formu -->
+          <div class="space-y-2">
+            <input type="text" id="quoteName" placeholder="Ad Soyad *" class="w-full text-xs p-2.5 rounded border border-slate-300 focus:outline-none focus:ring-1 focus:ring-sanayi-orange">
+            <input type="text" id="quoteCompany" placeholder="Firma Adı / Vergi No (İsteğe bağlı)" class="w-full text-xs p-2.5 rounded border border-slate-300 focus:outline-none focus:ring-1 focus:ring-sanayi-orange">
+            <div class="grid grid-cols-2 gap-2">
+              <input type="tel" id="quotePhone" placeholder="Telefon (05XX) *" class="text-xs p-2.5 rounded border border-slate-300 focus:outline-none focus:ring-1 focus:ring-sanayi-orange">
+              <input type="email" id="quoteEmail" placeholder="E-Posta *" class="text-xs p-2.5 rounded border border-slate-300 focus:outline-none focus:ring-1 focus:ring-sanayi-orange">
+            </div>
+          </div>
+
+          <!-- Gönderim Butonları -->
+          <div class="space-y-2 pt-1">
+            <button onclick="submitOrderAndQuote('whatsapp')" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition">
+              <i data-lucide="message-circle" class="w-4 h-4"></i> WhatsApp ile Teklif & Sipariş Gönder
+            </button>
+            <button onclick="submitOrderAndQuote('email')" class="w-full py-2.5 bg-sanayi-navy hover:bg-slate-800 text-white rounded-lg font-semibold text-xs flex items-center justify-center gap-2 transition">
+              <i data-lucide="send" class="w-4 h-4"></i> Resmi E-Posta Teklifi Oluştur
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- TEKNİK DETAY PENCERESİ (MODAL) -->
+  <div id="techModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-xs">
+    <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full overflow-hidden border border-slate-200 animate-in fade-in zoom-in-95 duration-150">
+      
+      <!-- Modal Başlık -->
+      <div class="bg-sanayi-slate text-white p-4 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <i data-lucide="file-spreadsheet" class="w-5 h-5 text-sanayi-orange"></i>
+          <div>
+            <h3 id="modalTitle" class="font-bold text-base leading-tight">Ürün Teknik Föyü</h3>
+            <span id="modalCode" class="text-xs font-mono text-sanayi-yellow">KOD: --</span>
+          </div>
+        </div>
+        <button onclick="closeTechModal()" class="text-slate-400 hover:text-white p-1 rounded-md">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Modal İçerik -->
+      <div class="p-5 space-y-4 max-h-[75vh] overflow-y-auto">
+        
+        <p id="modalDesc" class="text-sm text-slate-600 leading-relaxed"></p>
+
+        <!-- Teknik Parametreler Tablosu -->
+        <div>
+          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Teknik Özellikler ve Parametreler</h4>
+          <table class="w-full text-xs text-left border border-slate-200 rounded-lg overflow-hidden">
+            <tbody id="modalSpecsBody" class="divide-y divide-slate-200">
+              <!-- JS ile tablo satırları -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Sanayi Uygulama Notu -->
+        <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 text-xs text-slate-600 flex items-start gap-2">
+          <i data-lucide="info" class="w-4 h-4 text-sanayi-orange flex-shrink-0 mt-0.5"></i>
+          <span>Bu ürün ISO 9001 ve CE endüstriyel kalite standartlarına uygun imal edilmiştir. Montaj ve tesisat öncesinde basınç ve sıcaklık tolerans tablosunu kontrol ediniz.</span>
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="p-4 bg-slate-50 border-t border-slate-200 flex justify-end gap-2">
+        <button onclick="closeTechModal()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg text-xs font-semibold">Kapat</button>
+        <button id="modalActionBtn" class="px-4 py-2 bg-sanayi-orange hover:bg-sanayi-orangeHover text-white rounded-lg text-xs font-bold flex items-center gap-1.5 shadow-sm">
+          <!-- JS dinamik ekler -->
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TOAST BİLDİRİMİ -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl flex items-center gap-3 border border-slate-700 translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+    <div id="toastIcon" class="w-7 h-7 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center flex-shrink-0">
+      <i data-lucide="check" class="w-4 h-4"></i>
+    </div>
+    <div>
+      <h5 id="toastTitle" class="text-xs font-bold text-white leading-tight">Başarılı</h5>
+      <p id="toastMessage" class="text-[11px] text-slate-300 mt-0.5">Ürün teklif listesine eklendi.</p>
+    </div>
+  </div>
+
+  <!-- ================= JAVASCRIPT ================= -->
+  <script>
+    // 1. ENDÜSTRİYEL ÜRÜN VERİ SETİ
+    const PRODUCTS = [
+      {
+        id: "p1",
+        code: "HD-PST-50-250",
+        name: "Çift Etkili Ağır Hizmet Hidrolik Silindir Piston",
+        category: "hidrolik",
+        categoryName: "Hidrolik Sistemler",
+        type: "quote", // Fiyat teklifi istenir
+        price: null,
+        stock: true,
+        stockCount: 14,
+        unit: "Adet",
+        badge: "Teklif İste",
+        shortDesc: "Endüstriyel pres ve iş makineleri için honlanmış boru ve krom kaplı mil yapısı.",
+        specs: {
+          "Boru İç Çapı": "Ø 50 mm",
+          "Mil Çapı": "Ø 30 mm",
+          "Strok Boyu": "250 mm",
+          "Maks. Çalışma Basıncı": "250 Bar (3625 PSI)",
+          "Bağlantı Tipi": "G 3/8\" BSP Dişli Rekor",
+          "Sıcaklık Aralığı": "-25°C ile +85°C",
+          "Keçe Tipi": "Kastaş Poliüretan Takım"
+        }
+      },
+      {
+        id: "p2",
+        code: "HD-VLF-4WE6",
+        name: "Yön Kontrol Selenoid Valfi (4/3 Kapalı Merkez)",
+        category: "hidrolik",
+        categoryName: "Hidrolik Sistemler",
+        type: "ecommerce", // Doğrudan satın alınır
+        price: 2850.00,
+        stock: true,
+        stockCount: 38,
+        unit: "Adet",
+        badge: "Stoktan Hemen Teslim",
+        shortDesc: "24V DC bobinli Cetop 3 (NG6) standardında hidrolik yön kontrol valfi.",
+        specs: {
+          "Standart": "Cetop 3 / NG6",
+          "Çalışma Gerilimi": "24V DC (Led Soketli)",
+          "Maksimum Debi": "60 Lt/dk",
+          "Maks. Basınç": "315 Bar",
+          "Gövde Malzemesi": "Yüksek Kalite Döküm Gövde",
+          "Akışkan Uyumluluğu": "HLP 32 - HLP 46 Hidrolik Yağ"
+        }
+      },
+      {
+        id: "p3",
+        code: "PN-SLN-ISO-63",
+        name: "Manyetik Yastıklamalı Pnömatik Silindir",
+        category: "pnomatik",
+        categoryName: "Pnömatik",
+        type: "ecommerce",
+        price: 1350.00,
+        stock: true,
+        stockCount: 52,
+        unit: "Adet",
+        badge: "Hızlı Kargo",
+        shortDesc: "ISO 15552 standartlarında, ayarlanabilir uç yastıklamalı alüminyum profil silindir.",
+        specs: {
+          "Piston Çapı": "Ø 63 mm",
+          "Strok": "160 mm",
+          "Çalışma Akışkanı": "Filtrelenmiş Yağlı/Yağsız Hava",
+          "Basınç Aralığı": "1 - 10 Bar",
+          "Çalışma Sıcaklığı": "-20°C / +80°C",
+          "Gövde": "Eloksallı Alüminyum Ekstrüzyon"
+        }
+      },
+      {
+        id: "p4",
+        code: "PN-SART-OFR3",
+        name: "Hava Şartlandırıcı Filtre Regülatör Yağlayıcı Üçlü Grup",
+        category: "pnomatik",
+        categoryName: "Pnömatik",
+        type: "ecommerce",
+        price: 1980.00,
+        stock: true,
+        stockCount: 22,
+        unit: "Takım",
+        badge: "Orijinal Ürün",
+        shortDesc: "Basınçlı hava hatlarında su tahliyesi, hassas bar ayarı ve pnömatik yağlama sağlar.",
+        specs: {
+          "Port Boyutu": "1/2\" BSP",
+          "Filtreleme Hassasiyeti": "5 Mikron",
+          "Ayar Basıncı Aralığı": "0.5 - 12 Bar",
+          "Tahliye Tipi": "Yarı Otomatik Drenaj",
+          "Manometre": "0-16 Bar Gliserinli Saat Dahil"
+        }
+      },
+      {
+        id: "p5",
+        code: "KS-TRG-8M-50",
+        name: "Yüksek Torklu Triger Senkron Zaman Kayışı (8M Diş)",
+        category: "kayis-kasnak",
+        categoryName: "Kayış & Kasnak",
+        type: "ecommerce",
+        price: 490.00,
+        stock: true,
+        stockCount: 120,
+        unit: "Adet",
+        badge: "Stokta",
+        shortDesc: "Çelik kord takviyeli, kayma yapmayan senkron hatve güç aktarım triger kayışı.",
+        specs: {
+          "Diş Hatvesi (Pitch)": "8M (8 mm)",
+          "Genişlik": "50 mm",
+          "Boy / Diş Sayısı": "1200 mm / 150 Diş",
+          "Malzeme": "Kloropren Kauçuk & Cam Elyaf Çekirdek",
+          "Direnç": "Yağa ve ısıya dayanıklı"
+        }
+      },
+      {
+        id: "p6",
+        code: "KS-KSN-SPB-3V",
+        name: "3 Kanallı SPB Tipi Konik Burçlu V-Kasnak",
+        category: "kayis-kasnak",
+        categoryName: "Kayış & Kasnak",
+        type: "quote", // Teklifli
+        price: null,
+        stock: true,
+        stockCount: 8,
+        unit: "Adet",
+        badge: "Özel Çap / Teklif",
+        shortDesc: "GG25 pik döküm, dinamik balansı alınmış hazır burç uyumlu güç iletim kasnağı.",
+        specs: {
+          "Kanal Sayısı": "3 Kanallı SPB",
+          "Dış Çap (D)": "Ø 280 mm",
+          "Uyumlu Burç": "Taperlock 2517 Serisi",
+          "Maks. Mil Mili Çapı": "60 mm'ye kadar burç seçenekli",
+          "Denge Standardı": "ISO 1940 G6.3 Dinamik Balans"
+        }
+      },
+      {
+        id: "p7",
+        code: "RL-SZ-FKM-80",
+        name: "Viton (FKM) Yüksek Sıcaklık ve Kimyasal Döner Mil Keçesi",
+        category: "rulman-sizdirmazlik",
+        categoryName: "Rulman & Sızdırmazlık",
+        type: "ecommerce",
+        price: 215.00,
+        stock: true,
+        stockCount: 85,
+        unit: "Adet",
+        badge: "Viton Dayanım",
+        shortDesc: "Ağır sanayi reduktör ve hidrolik motor çıkışları için çift dudaklı yağ keçesi.",
+        specs: {
+          "Ölçüler": "80 x 100 x 10 mm",
+          "Malzeme Cinsi": "FKM Viton (Kahverengi)",
+          "Çalışma Sıcaklığı": "-20°C / +200°C",
+          "Uyumlu Yay": "Paslanmaz Çelik Yaylı",
+          "Maks. Çevresel Hız": "25 m/s"
+        }
+      },
+      {
+        id: "p8",
+        code: "RL-UCF-208",
+        name: "Dört Civatalı Ağır Hizmet Yataklı Rulman Ünitesi",
+        category: "rulman-sizdirmazlik",
+        categoryName: "Rulman & Sızdırmazlık",
+        type: "ecommerce",
+        price: 430.00,
+        stock: true,
+        stockCount: 60,
+        unit: "Adet",
+        badge: "Stokta",
+        shortDesc: "Gresörlük girişli döküm gövdeli konveyör ve şaft destek rulman bloku.",
+        specs: {
+          "Mil İç Çapı": "Ø 40 mm",
+          "Gövde Kodu": "F 208 Döküm",
+          "Rulman Kodu": "UC 208",
+          "Civata Aralığı": "102 mm",
+          "Yağlama": "Gresörlüklü Yeniden Yağlanabilir"
+        }
+      },
+      {
+        id: "p9",
+        code: "HD-HRT-4SP-12",
+        name: "4 Kat Çelik Telli R12 Hidrolik Hortum Presli Montaj",
+        category: "hidrolik",
+        categoryName: "Hidrolik Sistemler",
+        type: "quote", // Teklifli
+        price: null,
+        stock: true,
+        stockCount: 15,
+        unit: "Metre/Montaj",
+        badge: "Boyut Belirtiniz",
+        shortDesc: "İstediğiniz uzunlukta ve rekor başlıklarında (Düz, 90°, 45° dişi/erkek) preslenmiş hazır hortum.",
+        specs: {
+          "İç Çap": "1/2\" (12.7 mm)",
+          "Tel Örgüsü": "4 Spiral Yüksek Mukavemetli Çelik Tel",
+          "Patlatma Basıncı": "1600 Bar",
+          "Çalışma Basıncı": "400 Bar",
+          "Başlık Standartları": "DKOL, DKOS, BSP, JIC seçenekleri"
+        }
+      }
+    ];
+
+    // Kategoriler Listesi
+    const CATEGORIES = [
+      { id: "all", name: "Tüm Kategoriler", count: PRODUCTS.length },
+      { id: "hidrolik", name: "Hidrolik Sistemler", count: PRODUCTS.filter(p => p.category === 'hidrolik').length },
+      { id: "pnomatik", name: "Pnömatik", count: PRODUCTS.filter(p => p.category === 'pnomatik').length },
+      { id: "kayis-kasnak", name: "Kayış & Kasnak", count: PRODUCTS.filter(p => p.category === 'kayis-kasnak').length },
+      { id: "rulman-sizdirmazlik", name: "Rulman & Sızdırmazlık", count: PRODUCTS.filter(p => p.category === 'rulman-sizdirmazlik').length }
+    ];
+
+    // Uygulama Durumu (State)
+    let state = {
+      selectedCategory: "all",
+      searchQuery: "",
+      saleType: "all",
+      stockOnly: false,
+      sortBy: "featured",
+      cart: [] // { product, quantity, isQuote }
+    };
+
+    // Sayfa Yüklendiğinde Başlat
+    window.onload = function() {
+      renderCategoryFilters();
+      renderProducts();
+      updateCartUI();
+      lucide.createIcons();
+    };
+
+    // 2. KATEGORİ FİLTRELERİNİ OLUŞTURMA
+    function renderCategoryFilters() {
+      const container = document.getElementById("categoryFilterContainer");
+      container.innerHTML = CATEGORIES.map(cat => `
+        <button 
+          onclick="selectCategory('${cat.id}')"
+          class="w-full text-left text-xs py-2 px-2.5 rounded-lg flex items-center justify-between font-medium transition ${
+            state.selectedCategory === cat.id 
+              ? 'bg-sanayi-orange/10 text-sanayi-orange font-bold border-l-4 border-sanayi-orange' 
+              : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+          }"
+        >
+          <span>${cat.name}</span>
+          <span class="text-[10px] bg-slate-200/70 text-slate-600 px-1.5 py-0.5 rounded-full">${cat.count}</span>
+        </button>
+      `).join('');
+    }
+
+    function selectCategory(catId) {
+      state.selectedCategory = catId;
+      renderCategoryFilters();
+      filterProducts();
+      
+      const found = CATEGORIES.find(c => c.id === catId);
+      document.getElementById("currentCategoryTitle").textContent = found ? found.name : "Ürünler";
+    }
+
+    function handleSearch(val) {
+      state.searchQuery = val.trim().toLowerCase();
+      
+      // Senkronize et iki input'u
+      document.getElementById("searchInput").value = val;
+      document.getElementById("mobileSearchInput").value = val;
+
+      const clearBtn = document.getElementById("clearSearchBtn");
+      if (val.length > 0) {
+        clearBtn.classList.remove("hidden");
+      } else {
+        clearBtn.classList.add("hidden");
+      }
+
+      filterProducts();
+    }
+
+    function clearSearch() {
+      state.searchQuery = "";
+      document.getElementById("searchInput").value = "";
+      document.getElementById("mobileSearchInput").value = "";
+      document.getElementById("clearSearchBtn").classList.add("hidden");
+      filterProducts();
+    }
+
+    function resetFilters() {
+      state.selectedCategory = "all";
+      state.searchQuery = "";
+      state.saleType = "all";
+      state.stockOnly = false;
+      state.sortBy = "featured";
+
+      document.getElementById("searchInput").value = "";
+      document.getElementById("mobileSearchInput").value = "";
+      document.getElementById("clearSearchBtn").classList.add("hidden");
+      document.querySelector('input[name="saleType"][value="all"]').checked = true;
+      document.getElementById("stockOnlyCheckbox").checked = false;
+      document.getElementById("sortSelect").value = "featured";
+
+      renderCategoryFilters();
+      filterProducts();
+      document.getElementById("currentCategoryTitle").textContent = "Tüm Endüstriyel Ürünler";
+    }
+
+    // 3. FİLTRELEME & SIRALAMA MANTIĞI
+    function filterProducts() {
+      // Form değerlerini oku
+      const saleTypeEl = document.querySelector('input[name="saleType"]:checked');
+      state.saleType = saleTypeEl ? saleTypeEl.value : "all";
+      state.stockOnly = document.getElementById("stockOnlyCheckbox").checked;
+      state.sortBy = document.getElementById("sortSelect").value;
+
+      let filtered = PRODUCTS.filter(item => {
+        // Kategori eşleşmesi
+        if (state.selectedCategory !== "all" && item.category !== state.selectedCategory) {
+          return false;
+        }
+        // Satış Tipi
+        if (state.saleType !== "all" && item.type !== state.saleType) {
+          return false;
+        }
+        // Stok
+        if (state.stockOnly && !item.stock) {
+          return false;
+        }
+        // Arama sorgusu (kod, isim, kategori veya spesifikasyonlarda arar)
+        if (state.searchQuery) {
+          const matchCode = item.code.toLowerCase().includes(state.searchQuery);
+          const matchName = item.name.toLowerCase().includes(state.searchQuery);
+          const matchDesc = item.shortDesc.toLowerCase().includes(state.searchQuery);
+          if (!matchCode && !matchName && !matchDesc) return false;
+        }
+        return true;
+      });
+
+      // Sıralama
+      if (state.sortBy === "price-asc") {
+        filtered.sort((a, b) => (a.price || 999999) - (b.price || 999999));
+      } else if (state.sortBy === "price-desc") {
+        filtered.sort((a, b) => (b.price || 0) - (a.price || 0));
+      } else if (state.sortBy === "code") {
+        filtered.sort((a, b) => a.code.localeCompare(b.code));
+      }
+
+      renderProducts(filtered);
+    }
+
+    // 4. ÜRÜN KARTLARINI ÇİZME
+    function renderProducts(itemsToRender = null) {
+      const items = itemsToRender !== null ? itemsToRender : PRODUCTS;
+      const grid = document.getElementById("productsGrid");
+      const noResults = document.getElementById("noResults");
+      const countLabel = document.getElementById("productCount");
+
+      countLabel.textContent = items.length;
+
+      if (items.length === 0) {
+        grid.innerHTML = "";
+        noResults.classList.remove("hidden");
+        return;
+      }
+
+      noResults.classList.add("hidden");
+
+      grid.innerHTML = items.map(p => {
+        const isQuote = p.type === "quote";
+        const priceDisplay = isQuote 
+          ? `<div class="text-amber-600 font-bold text-sm flex items-center gap-1.5"><i data-lucide="file-question" class="w-4 h-4"></i> Fiyat Teklifi İsteyiniz</div>` 
+          : `<div class="text-slate-900 font-extrabold text-lg">${p.price.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} <span class="text-xs font-semibold text-slate-500">TL + KDV</span></div>`;
+
+        // Anahtar teknik özelliklerden ilk 2 tanesini kartta göster
+        const specKeys = Object.keys(p.specs).slice(0, 2);
+        const quickSpecs = specKeys.map(k => `
+          <div class="flex justify-between text-[11px] py-1 border-b border-slate-100 last:border-none">
+            <span class="text-slate-400 font-medium">${k}:</span>
+            <span class="font-semibold text-slate-700 font-mono">${p.specs[k]}</span>
+          </div>
+        `).join('');
+
+        return `
+          <div class="bg-white rounded-xl border border-slate-200 overflow-hidden hover:shadow-lg transition-all duration-200 flex flex-col group">
+            
+            <!-- Kart Üst Bar (Kod ve Stok) -->
+            <div class="p-3.5 pb-2 bg-slate-50 border-b border-slate-100 flex items-center justify-between">
+              <span class="badge-code text-xs font-bold bg-slate-200/80 text-slate-800 px-2.5 py-0.5 rounded tracking-wide flex items-center gap-1">
+                <i data-lucide="tag" class="w-3 h-3 text-sanayi-orange"></i> ${p.code}
+              </span>
+              <span class="text-[11px] font-semibold text-emerald-700 flex items-center gap-1">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse"></span> Stokta (${p.stockCount} ${p.unit})
+              </span>
+            </div>
+
+            <!-- Ürün Gövdesi -->
+            <div class="p-4 flex-1 flex flex-col justify-between">
+              <div>
+                <span class="text-[10px] uppercase font-bold text-sanayi-steel tracking-wider">${p.categoryName}</span>
+                <h3 class="font-bold text-slate-900 text-sm mt-0.5 group-hover:text-sanayi-orange transition line-clamp-2 leading-snug">
+                  ${p.name}
+                </h3>
+                <p class="text-xs text-slate-500 mt-1.5 line-clamp-2 leading-relaxed">
+                  ${p.shortDesc}
+                </p>
+
+                <!-- Mini Özellik Tablosu -->
+                <div class="mt-3 bg-slate-50 rounded-lg p-2.5 border border-slate-100">
+                  ${quickSpecs}
+                </div>
+              </div>
+
+              <!-- Fiyat & Aksiyon Butonları -->
+              <div class="mt-4 pt-3 border-t border-slate-100">
+                <div class="mb-3">
+                  ${priceDisplay}
+                </div>
+
+                <div class="grid grid-cols-2 gap-2">
+                  <!-- Teknik Detay Butonu -->
+                  <button 
+                    onclick="openTechModal('${p.id}')"
+                    class="w-full py-2 px-2 border border-slate-300 hover:border-slate-400 text-slate-700 bg-white hover:bg-slate-50 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition"
+                  >
+                    <i data-lucide="info" class="w-3.5 h-3.5 text-sanayi-steel"></i> Teknik Föy
+                  </button>
+
+                  <!-- Sepete Ekle VEYA Teklife Ekle Butonu -->
+                  ${isQuote ? `
+                    <button 
+                      onclick="addToCart('${p.id}')"
+                      class="w-full py-2 px-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm transition"
+                    >
+                      <i data-lucide="file-plus" class="w-3.5 h-3.5"></i> Teklife Ekle
+                    </button>
+                  ` : `
+                    <button 
+                      onclick="addToCart('${p.id}')"
+                      class="w-full py-2 px-2 bg-sanayi-orange hover:bg-sanayi-orangeHover text-white rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm transition"
+                    >
+                      <i data-lucide="shopping-cart" class="w-3.5 h-3.5"></i> Sepete Ekle
+                    </button>
+                  `}
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        `;
+      }).join('');
+
+      lucide.createIcons();
+    }
+
+    // 5. SEPET VE TEKLİF LİSTESİ YÖNETİMİ
+    function addToCart(productId) {
+      const product = PRODUCTS.find(p => p.id === productId);
+      if (!product) return;
+
+      const existingIndex = state.cart.findIndex(item => item.product.id === productId);
+
+      if (existingIndex > -1) {
+        state.cart[existingIndex].quantity += 1;
+      } else {
+        state.cart.push({
+          product: product,
+          quantity: 1,
+          isQuote: product.type === "quote"
+        });
+      }
+
+      updateCartUI();
+      showToast(
+        product.type === "quote" ? "Teklif Listesine Eklendi" : "Sepete Eklendi",
+        `${product.code} - ${product.name.substring(0, 30)}... listeye dahil edildi.`
+      );
+    }
+
+    function changeQuantity(productId, delta) {
+      const itemIndex = state.cart.findIndex(i => i.product.id === productId);
+      if (itemIndex === -1) return;
+
+      state.cart[itemIndex].quantity += delta;
+      if (state.cart[itemIndex].quantity <= 0) {
+        state.cart.splice(itemIndex, 1);
+      }
+      updateCartUI();
+    }
+
+    function removeFromCart(productId) {
+      state.cart = state.cart.filter(i => i.product.id !== productId);
+      updateCartUI();
+    }
+
+    function updateCartUI() {
+      // Toplam adet rozeti
+      const totalCount = state.cart.reduce((sum, item) => sum + item.quantity, 0);
+      document.getElementById("cartCountBadge").textContent = totalCount;
+
+      const listContainer = document.getElementById("drawerItemsList");
+      const drawerFixedTotal = document.getElementById("drawerFixedTotal");
+      const drawerQuoteCount = document.getElementById("drawerQuoteCount");
+
+      if (state.cart.length === 0) {
+        listContainer.innerHTML = `
+          <div class="h-64 flex flex-col items-center justify-center text-center text-slate-400">
+            <i data-lucide="shopping-bag" class="w-12 h-12 stroke-1 mb-2 text-slate-300"></i>
+            <p class="text-sm font-semibold text-slate-600">Listeniz Henüz Boş</p>
+            <p class="text-xs text-slate-400 max-w-xs mt-1">Katalogdan ürünleri sepete ekleyebilir veya teklif talep listesi oluşturabilirsiniz.</p>
+          </div>
+        `;
+        drawerFixedTotal.textContent = "0,00 TL";
+        drawerQuoteCount.textContent = "0 Kalem";
+        lucide.createIcons();
+        return;
+      }
+
+      let fixedTotal = 0;
+      let quoteCount = 0;
+
+      listContainer.innerHTML = state.cart.map(item => {
+        const p = item.product;
+        if (p.type === "ecommerce") {
+          fixedTotal += p.price * item.quantity;
+        } else {
+          quoteCount += 1;
+        }
+
+        return `
+          <div class="p-3 bg-slate-50 border border-slate-200 rounded-lg flex items-start justify-between gap-3 text-xs">
+            <div class="flex-1">
+              <div class="flex items-center gap-1.5">
+                <span class="badge-code font-bold text-[10px] bg-slate-200 px-1.5 py-0.5 rounded text-slate-700">${p.code}</span>
+                ${item.isQuote ? '<span class="bg-amber-100 text-amber-800 text-[10px] font-bold px-1.5 py-0.5 rounded">Fiyat Teklifi</span>' : ''}
+              </div>
+              <h4 class="font-bold text-slate-800 mt-1 leading-tight">${p.name}</h4>
+              <div class="text-slate-500 mt-1">
+                ${item.isQuote ? 'Fiyat: Özel Teklif Bekleniyor' : `Birim: ${p.price.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} TL`}
+              </div>
+            </div>
+
+            <!-- Adet Kontrolleri -->
+            <div class="flex flex-col items-end gap-2">
+              <div class="flex items-center border border-slate-300 rounded bg-white">
+                <button onclick="changeQuantity('${p.id}', -1)" class="w-6 h-6 flex items-center justify-center text-slate-600 hover:bg-slate-100">-</button>
+                <span class="w-6 text-center font-bold text-slate-800 text-xs">${item.quantity}</span>
+                <button onclick="changeQuantity('${p.id}', 1)" class="w-6 h-6 flex items-center justify-center text-slate-600 hover:bg-slate-100">+</button>
+              </div>
+              <button onclick="removeFromCart('${p.id}')" class="text-rose-500 hover:text-rose-700 text-[11px] font-semibold flex items-center gap-0.5">
+                <i data-lucide="trash-2" class="w-3 h-3"></i> Sil
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      drawerFixedTotal.textContent = fixedTotal.toLocaleString('tr-TR', { minimumFractionDigits: 2 }) + " TL + KDV";
+      drawerQuoteCount.textContent = `${quoteCount} Kalem Ürün`;
+
+      lucide.createIcons();
+    }
+
+    // 6. TEKLİF & SİPARİŞ İLETİM MANTIĞI (WHATSAPP & EMAIL)
+    function submitOrderAndQuote(channel) {
+      if (state.cart.length === 0) {
+        alertCustom("Lütfen listenize en az bir ürün ekleyiniz.");
+        return;
+      }
+
+      const name = document.getElementById("quoteName").value.trim();
+      const phone = document.getElementById("quotePhone").value.trim();
+      const company = document.getElementById("quoteCompany").value.trim();
+      const email = document.getElementById("quoteEmail").value.trim();
+
+      if (!name || !phone) {
+        alertCustom("Lütfen adınızı ve telefon numaranızı eksiksiz giriniz.");
+        return;
+      }
+
+      // Mesaj Formatlama
+      let message = `*HİDROTEKNİK ENDÜSTRİYEL - YENİ TALEP / SİPARİŞ*%0A`;
+      message += `--------------------------------%0A`;
+      message += `*Müşteri:* ${name}%0A`;
+      if (company) message += `*Firma:* ${company}%0A`;
+      message += `*Telefon:* ${phone}%0A`;
+      if (email) message += `*E-Posta:* ${email}%0A`;
+      message += `--------------------------------%0A`;
+      message += `*TALEP EDİLEN ÜRÜNLER LİSTESİ:*%0A`;
+
+      let fixedTotal = 0;
+
+      state.cart.forEach((item, index) => {
+        const p = item.product;
+        message += `%0A${index + 1}) [${p.code}] ${p.name}%0A`;
+        message += `   Adet: ${item.quantity} ${p.unit}%0A`;
+        if (p.type === "ecommerce") {
+          const itemTotal = p.price * item.quantity;
+          fixedTotal += itemTotal;
+          message += `   Fiyat: ${itemTotal.toLocaleString('tr-TR')} TL + KDV%0A`;
+        } else {
+          message += `   Durum: ÖZEL TEKLİF VE ÇİZİM TALEP EDİLDİ%0A`;
+        }
+      });
+
+      if (fixedTotal > 0) {
+        message += `%0A*Hemen Alınacaklar Toplamı:* ${fixedTotal.toLocaleString('tr-TR')} TL + KDV%0A`;
+      }
+
+      if (channel === 'whatsapp') {
+        // WhatsApp API linki
+        const whatsappNumber = "905000000000"; // İlan sahibinin veya Babanın hattı
+        const url = `https://wa.me/${whatsappNumber}?text=${message}`;
+        window.open(url, '_blank');
+      } else {
+        // Email Formatı
+        const subject = encodeURIComponent(`Endüstriyel Teklif Talebi: ${company || name}`);
+        const mailUrl = `mailto:teklif@hidroteknik.example?subject=${subject}&body=${message.replace(/%0A/g, '%0D%0A')}`;
+        window.location.href = mailUrl;
+      }
+
+      showToast("Talebiniz Aktarıldı", "Sipariş ve teklif listesi başarıyla yönlendirildi.");
+      toggleDrawer(false);
+    }
+
+    // 7. TEKNİK DETAY PENCERESİ (MODAL)
+    function openTechModal(productId) {
+      const p = PRODUCTS.find(x => x.id === productId);
+      if (!p) return;
+
+      document.getElementById("modalTitle").textContent = p.name;
+      document.getElementById("modalCode").textContent = `KOD / SKU: ${p.code}`;
+      document.getElementById("modalDesc").textContent = p.shortDesc;
+
+      const tbody = document.getElementById("modalSpecsBody");
+      tbody.innerHTML = Object.entries(p.specs).map(([key, value]) => `
+        <tr class="hover:bg-slate-50">
+          <td class="py-2.5 px-3 font-semibold text-slate-500 bg-slate-50/50 w-2/5 border-r border-slate-200">${key}</td>
+          <td class="py-2.5 px-3 font-bold text-slate-800 font-mono">${value}</td>
+        </tr>
+      `).join('');
+
+      // Aksiyon butonu
+      const actionBtn = document.getElementById("modalActionBtn");
+      if (p.type === "quote") {
+        actionBtn.className = "px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 shadow-sm";
+        actionBtn.innerHTML = `<i data-lucide="file-plus" class="w-4 h-4"></i> Teklif Listesine Ekle`;
+      } else {
+        actionBtn.className = "px-4 py-2 bg-sanayi-orange hover:bg-sanayi-orangeHover text-white rounded-lg text-xs font-bold flex items-center gap-1.5 shadow-sm";
+        actionBtn.innerHTML = `<i data-lucide="shopping-cart" class="w-4 h-4"></i> Sepete Ekle (${p.price.toLocaleString('tr-TR')} TL)`;
+      }
+      actionBtn.onclick = () => {
+        addToCart(p.id);
+        closeTechModal();
+      };
+
+      document.getElementById("techModal").classList.remove("hidden");
+      lucide.createIcons();
+    }
+
+    function closeTechModal() {
+      document.getElementById("techModal").classList.add("hidden");
+    }
+
+    // Drawer Aç/Kapat
+    function toggleDrawer(open) {
+      const drawer = document.getElementById("cartDrawer");
+      if (open) {
+        drawer.classList.remove("pointer-events-none");
+        drawer.classList.remove("opacity-0");
+        drawer.classList.add("opacity-100");
+      } else {
+        drawer.classList.add("opacity-0");
+        drawer.classList.remove("opacity-100");
+        drawer.classList.add("pointer-events-none");
+      }
+    }
+
+    // Toast Mesajı
+    function showToast(title, msg) {
+      const toast = document.getElementById("toast");
+      document.getElementById("toastTitle").textContent = title;
+      document.getElementById("toastMessage").textContent = msg;
+
+      toast.classList.remove("translate-y-20", "opacity-0");
+      toast.classList.add("translate-y-0", "opacity-100");
+
+      setTimeout(() => {
+        toast.classList.remove("translate-y-0", "opacity-100");
+        toast.classList.add("translate-y-20", "opacity-0");
+      }, 3500);
+    }
+
+    // Özel Bildirim Kutusu (alert yerine)
+    function alertCustom(message) {
+      showToast("Bilgilendirme", message);
+    }
+  </script>
+</body>
+</html>
